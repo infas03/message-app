@@ -1,7 +1,6 @@
-// src/AppRouter.js
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import LandingPage from '../screens/message/landingPage';
+import LandingPage from '../screens/landingPage';
 import MessageHome from '../screens/message/messageHome';
 
 const AppRouter = () => {

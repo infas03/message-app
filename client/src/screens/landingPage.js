@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../context/authContext';
+import { userLogin } from '../actions/userAction';
 
 const LandingPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { setAuthUser } = useAuthContext();
+
   const [username, setUsername] = useState('');
 
   const handleSubmit = async (event) => {
@@ -8,6 +16,7 @@ const LandingPage = () => {
     
     if (username) {
       console.log('username:', username);
+      dispatch(userLogin({username}, navigate, setAuthUser));
     }
   };
 
@@ -17,13 +26,13 @@ const LandingPage = () => {
         <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-              Enter your name
+              Enter your username
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="username"
               type="text"
-              placeholder="Your name"
+              placeholder="Your username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />

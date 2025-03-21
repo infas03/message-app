@@ -7,28 +7,26 @@ import { useAuthContext } from "./authContext";
 const SocketContext = createContext();
 const socketUrl = process.env.REACT_APP_SOCKET_APIURL;
 
-
 export const useSocketContext = () => {
 	return useContext(SocketContext);
 };
 
 export const SocketContextProvider = ({ children }) => {
-	const isEmployerLogin = useSelector((state) => state.employerLogin);
 	const [socket, setSocket] = useState(null);
 	const [onlineUsers, setOnlineUsers] = useState([]);
 	const { authUser } = useAuthContext();
-  console.log("authUser OUTSIDE: " + authUser)
+  console.log("authUser OUTSIDE: " + authUser);
 
 
 	useEffect(() => {
-    console.log("authUser: " + authUser)
-		console.log("authUser?.id: " + authUser?.id)
+    console.log("authUser: " + authUser);
+
 		if (authUser) {
-			console.log("if authUser?.id: " + authUser.id)
-			console.log(socketUrl)
+			console.log("if authUser?.id: " + authUser);
+			console.log("socketUrl: ", socketUrl);
 			const socket = io(socketUrl, {
 				query: {
-					userId: authUser.id,
+					userId: authUser,
 				},
 			});
 

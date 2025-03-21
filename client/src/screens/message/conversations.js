@@ -2,8 +2,10 @@ import React, { useEffect } from 'react';
 import Conversation from './conversation';
 import { useSelector, useDispatch } from 'react-redux';
 import { getConversations } from '../../actions/messageAction';
+import { useAuthContext } from '../../context/authContext';
 
 const Conversations = () => {
+  const { authUser } = useAuthContext();
 
   const conversations = useSelector((state) => state.message.useConversations);
 
@@ -11,8 +13,10 @@ const Conversations = () => {
 
   useEffect(() => {
     console.log('CHECK');
-    dispatch(getConversations());
-  }, []);
+    if(authUser){
+      dispatch(getConversations(authUser));
+    }
+  }, [authUser]);
 
   console.log('conversations?.allUsers: ', conversations?.allUsers);
 

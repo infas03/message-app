@@ -198,15 +198,17 @@ router.post('/addtoconversation/:id', async (req, res) => {
 router.get('/getusersforsidebar', async (req, res) => {
 
     try {
-        const senderId = res.locals.currentId;
-   
-         console.log(senderId)
-        const conversations = await Conversation.find({
-            participants: senderId
-        });
+        // const senderId = res.locals.currentId;
+        const senderId = req.query.currentId;
+        console.log("senderId: ", senderId)
+        
+        // const conversations = await Conversation.find({
+        //     participants: senderId
+        // });
 
-        console.log("conversations")
-        console.log(conversations)
+        const conversations = await Conversation.find();
+
+        console.log("conversations: ", conversations);
 
         const participantIds = new Set();
         conversations.forEach(conversation => {
@@ -216,15 +218,9 @@ router.get('/getusersforsidebar', async (req, res) => {
         });
 
         participantIds.delete(senderId.toString());
-   let allUsers = []
-        if (res.locals.role == 'employer') {
-         allUsers = await User.find({ _id: { $in: Array.from(participantIds) } });
-        }
-        else {
-         allUsers = await Employer.find({ _id: { $in: Array.from(participantIds) } });
+        let allUsers = [];
 
-         console.log(allUsers);
-        }
+         allUsers = await User.find({ _id: { $in: Array.from(participantIds) } });
 
          const usersWithUnreadCounts = allUsers.map(user => {
             const userId = user._id.toString();

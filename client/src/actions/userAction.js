@@ -2,6 +2,7 @@ import axios from 'axios';
 import { ToastBar } from '../common/toastbar';
 
 const apiUrl = process.env.REACT_APP_APIURL;
+console.log('apiUrl: ', apiUrl);
 const localLang = localStorage.getItem('lan');
 
 export const FETCH_USER_REQUEST = 'FETCH_USER_REQUEST';
@@ -54,43 +55,23 @@ export const setCurrentIdNull = () => ({
   type: SET_CURRENT_USER_ID_NULL
 });
 
-export const fetchAllInterviews = (data) => ({
-  type: FETCH_ALL_INTERVIEWS,
-  payload: data
-});
-
-export const candidateLogin = (values, navigate, setAuthUser) => {
-  console.log('login');
-  const inputData = {
-    email: values.email,
-    password: values.password
-  };
-  console.log(inputData);
+export const userLogin = (values, navigate, setAuthUser) => {
+  console.log("login inputData: ", values);
   return async (dispatch) => {
     try {
-      const response = await axios.post(`${apiUrl}/user/userlogin`, inputData);
+      const response = await axios.post(`${apiUrl}/user/createuser`, values);
       if (response.status === 200) {
-        console.log(response.data)
-        console.log("CHECKING ")
-        localStorage.setItem('token', response.data.token);
-        // dispatch(getCurrentUser());
-        dispatch(fetchUserLogin());
-        dispatch(setCurrentId(response.data.user._id));
-        console.log('candidate login id');
-        console.log(response.data._id);
-        setAuthUser(response.data._id);
-        navigate('/search-jobs');
-        ToastBar.success(response.data.successMsg[localLang]);
+        console.log('login res: ', response.data)
+        console.log('candidate login id: ', response.data.result._id);
+        dispatch(setCurrentId(response.data.result._id));
+        setAuthUser(response.data.result._id);
+        navigate('/message');
+        ToastBar.success(response.data.successMsg);
       }
     } catch (error) {
       if (error.response && error.response.status === 500) {
         console.log(error.response.data.errorMsg);
-        ToastBar.error(error.response.data.errorMsg[localLang]);
-        if (error.response.data.status === 0) {
-          navigate('/not-activated');
-        } else if (error.response.data.status === 3) {
-          navigate('/suspended');
-        }
+        ToastBar.error(error.response.data.errorMsg);
       } else {
         console.log(error.message);
         ToastBar.error(error.message);
@@ -104,9 +85,7 @@ export const userLogout = (navigate, setAuthUser) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        `${apiUrl}/user/logout`,
-        {},
-        {
+        `${apiUrl}/user/logout`,{}, {
           headers: {
             Authorization: 'Bearer ' + localStorage.getItem('token')
           }
@@ -117,11 +96,9 @@ export const userLogout = (navigate, setAuthUser) => {
         navigate('/');
         setTimeout(() => {
           localStorage.removeItem('token');
-          dispatch(fetchUserLogout());
           dispatch(fetchUserInit());
           setAuthUser(null);
-          dispatch(setCurrentIdNull());
-          ToastBar.success(response.data.successMsg[localLang]);
+          ToastBar.success(response.data.successMsg);
         }, 0);
       }
     } catch (error) {

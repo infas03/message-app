@@ -175,14 +175,10 @@ export const sendMessage = (id, messageContent) => async (dispatch) => {
   }
 };
 
-export const getConversations = () => async (dispatch) => {
-  console.log('get conversations');
+export const getConversations = (value) => async (dispatch) => {
+  console.log('get conversations value: ', value);
   try {
-    const response = await axios.get(`${apiUrl}/message/getusersforsidebar`, {
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('token')
-      }
-    });
+    const response = await axios.get(`${apiUrl}/message/getusersforsidebar?currentId=${value}`);
     if (response.status === 200) {
       console.log('res ' + response.data);
       dispatch(getConversationsSuccess(response.data));

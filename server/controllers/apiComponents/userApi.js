@@ -4,8 +4,9 @@ import User from "../../models/userModel.js";
 import { msg } from "../../messages.js";
 
 router.post("/createuser", (req, res) => {
+  console.log("req.body: ", req.body);
   if (typeof req.body.username == "undefined")
-    return res.status(500).json({ errorMsg: msg.noEmailFound });
+    return res.status(500).json({ errorMsg: "username invalid" });
 
   User.findOne({ username: req.body.username })
     .then((existingUser) => {
@@ -32,9 +33,13 @@ router.post("/createuser", (req, res) => {
     })
     .catch((e) => {
       console.error(e);
-      return res.status(500).json({ errorMsg: msg.accountFail });
+      return res.status(500).json({ errorMsg: "account create failed" });
     });
 });
+
+router.post('/logout', (req, res) => {
+  return res.status(200).json({ successMsg: msg.logout })
+})
 
 export default function (app) {
   app.use('/api/user', router)

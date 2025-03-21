@@ -15,11 +15,11 @@ export const AuthContextProvider = ({ children }) => {
     console.log("useEffect currentId: ", currentId );
 
     if (currentId) {
-      setAuthUser({ id: currentId });
+      setAuthUser(currentId);
     } else {
       setAuthUser(null);
     }
-    console.log("Inside useEffect - authUser: ", { id: currentId });
+    console.log("Inside useEffect - authUser: ", currentId);
   }, [currentId]);
 
   console.log("currentId: ", currentId );
