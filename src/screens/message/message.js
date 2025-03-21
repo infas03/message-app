@@ -1,16 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchMessages, sendMessage } from '../../../actions/messageAction';
-import { useAuthContext } from '../../../context/authContext';
+import React from 'react';
+import { useAuthContext } from '../../context/authContext';
 
 const Message = ({ message }) => {
-  const employer = useSelector((state) => state.employer);
-
-  const user = useSelector((state) => state.user);
   const { authUser } = useAuthContext();
-
-  const dispatch = useDispatch();
-  const selectedConversation = useSelector((state) => state.message.selectedConversation);
 
   const extractTime = (time) => {
     var d = new Date(time);
@@ -20,7 +12,6 @@ const Message = ({ message }) => {
 
   const fromMe = message?.senderId === authUser?.id;
   const formattedTime = extractTime(message.timestamp);
-  const profilePic = fromMe ? user?.avatar : selectedConversation?.companyLogo;
   const chatClassName = fromMe ? 'items-end justify-end' : 'items-end';
   const bubbleBgColor = fromMe ? 'bg-[#8fb0b0]' : 'bg-[#f4f8f9]';
 

@@ -1,23 +1,15 @@
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-//import useConversation from "../../zustand/useConversation";
 import MessageInput from './messageInput';
 import Messages from './messages';
-import { TiMessages } from 'react-icons/ti';
-//import { useAuthContext } from "../../context/AuthContext";
-import { setSelectedConversation } from '../../../actions/messageAction';
+import { setSelectedConversation } from '../../actions/messageAction';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchMessages } from '../../../actions/messageAction';
-import { useSocketContext } from '../../../context/socketContext';
+import { fetchMessages } from '../../actions/messageAction';
+import { useSocketContext } from '../../context/socketContext';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
-import defaultImage from '../../../assets/images/Default_profilepic.png';
+import defaultImage from '../../assets/images/Default_profilepic.png';
 
 const MessageContainer = () => {
   const dispatch = useDispatch();
-  // const location = useLocation();
-  // const { receiverId } = location.state;
-  // console.log('receiverId: ', receiverId);
-  //const { selectedConversation, setSelectedConversation } = useConversation();
   const selectedConversation = useSelector((state) => state.message.selectedConversation);
 
   const messages = useSelector((state) => state.message.messages);
@@ -25,16 +17,6 @@ const MessageContainer = () => {
   console.log('selectedConversation: ', selectedConversation);
   const { onlineUsers } = useSocketContext();
   const isOnline = onlineUsers?.includes(selectedConversation?._id);
-
-  // useEffect(() => {
-  // 	// cleanup function (unmounts)
-  // 	return () => setSelectedConversation(null);
-  // }, [setSelectedConversation]);
-
-  // useEffect(() => {
-  //     console.log("CHECK")
-  //     dispatch(fetchMessages(receiverId));
-  // }, []);
 
   useEffect(() => {
     console.log('Current selectedConversation:', selectedConversation);
@@ -44,12 +26,6 @@ const MessageContainer = () => {
     }
   }, [selectedConversation, dispatch]);
 
-  // useEffect(() => {
-  //   return () => {
-  //     dispatch(setSelectedConversation(null));
-  //   };
-  // }, [dispatch]);
-
   const handleBackClick = () => {
     dispatch(setSelectedConversation(null));
   };
@@ -58,12 +34,11 @@ const MessageContainer = () => {
   console.log('messages: ', messages);
 
   return (
-    <div className="min-w-full md:min-w-[600px] flex flex-col border-[1px] rounded-e-lg overflow-auto">
+    <div className="min-w-full md:min-w-[600px] flex flex-col border-[1px] rounded-e-lg overflow-auto bg-gray-200">
       {!selectedConversation ? (
         <NoChatSelected />
       ) : (
         <div className="lg:max-w-[800px] h-full bg-[#f0f0f0] flex flex-col overflow-hidden">
-          {/* Header */}
           <div className="flex justify-between items-center py-2 px-5 mb-2 h-14 bg-[#f4f8f9] border-b-[1px]">
             <div className="flex items-center gap-x-2 lg:gap-x-4">
               <img
@@ -107,13 +82,10 @@ const MessageContainer = () => {
 export default MessageContainer;
 
 const NoChatSelected = () => {
-  const lang = useSelector((state) => state.language.lang);
   return (
     <div className="flex items-center justify-center w-full h-full">
-      <div className="px-4 text-center sm:text-lg md:text-xl text-gray-200 font-semibold flex flex-col items-center gap-2">
-        {/* <p>Welcome 👋 {authUser.fullName} ❄</p> */}
-        <p>{lang.generalSelectChat}</p>
-        <TiMessages className="text-3xl md:text-6xl text-center" />
+      <div className="px-4 text-center sm:text-lg md:text-xl text-gray-500 font-semibold flex flex-col items-center gap-2">
+        <p>Select Chat</p>
       </div>
     </div>
   );

@@ -1,15 +1,15 @@
 // src/AppRouter.js
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import LandingPage from '../screens/landingPage';
-import Chat from '../screens/chat';
+import LandingPage from '../screens/message/landingPage';
+import MessageHome from '../screens/message/messageHome';
 
 const AppRouter = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/chat" element={<Chat />} />
+        <Route path="/message" element={<MessageHome />} />
       </Routes>
     </Router>
   );

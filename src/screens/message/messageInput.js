@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { BsSend } from 'react-icons/bs';
-import { fetchMessages, sendMessage } from '../../../actions/messageAction';
+import { sendMessage } from '../../actions/messageAction';
 import { useSelector, useDispatch } from 'react-redux';
 
 const MessageInput = () => {
   const [message, setMessage] = useState('');
-  //const { loading, sendMessage } = useSendMessage();
   const dispatch = useDispatch();
   const selectedConversation = useSelector((state) => state.message.selectedConversation);
 
@@ -29,7 +28,6 @@ const MessageInput = () => {
         />
         <button type="submit" className="absolute inset-y-0 end-0 flex items-center pe-3">
           <BsSend />
-          {/* {loading ? <div className='loading loading-spinner'></div> : <BsSend />} */}
         </button>
       </div>
     </form>

@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { IoSearchSharp } from 'react-icons/io5';
-import { ToastBar } from '../../../common/toastbar';
-import { setSelectedConversation, setMessages } from '../../../actions/messageAction';
+import { setSelectedConversation } from '../../actions/messageAction';
+import { ToastBar } from '../../common/toastbar';
 
 const SearchInput = () => {
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const dispatch = useDispatch();
-  const selectedConversation = useSelector((state) => state.selectedConversation);
   const conversations = useSelector((state) => state.message.useConversations);
 
   const handleSearchChange = (e) => {
@@ -75,50 +74,3 @@ const SearchInput = () => {
 };
 
 export default SearchInput;
-
-// import { useState } from "react";
-// import { useSelector, useDispatch } from 'react-redux';
-// import { IoSearchSharp } from "react-icons/io5";
-// //import useConversation from "../../zustand/useConversation";
-// //import useGetConversations from "../../hooks/useGetConversations";
-// import { ToastBar } from "../../../common/toastbar";
-// import { setSelectedConversation, setMessages } from '../../../actions/messageAction';
-
-// const SearchInput = () => {
-// 	const [search, setSearch] = useState("");
-//     const dispatch = useDispatch();
-// 	//const { setSelectedConversation } = useConversation();
-//     const selectedConversation = useSelector(state => state.selectedConversation);
-// 	//const { conversations } = useGetConversations();
-//     const conversations = useSelector((state) => state.message.useConversations);
-
-// 	const handleSubmit = (e) => {
-// 		e.preventDefault();
-// 		if (!search) return;
-// 		if (search.length < 3) {
-// 			return ToastBar.error("Search term must be at least 3 characters long");
-// 		}
-
-// 		const conversation = conversations.allUsers.find((c) => c.companyName.toLowerCase().includes(search.toLowerCase()));
-
-// 		if (conversation) {
-// 			dispatch(setSelectedConversation(conversation));
-// 			setSearch("");
-// 		} else ToastBar.error("No such user found!");
-// 	};
-// 	return (
-// 		<form onSubmit={handleSubmit} className='flex items-center gap-2'>
-// 			<input
-// 				type='text'
-// 				placeholder='Search…'
-// 				className='input input-bordered rounded-full'
-// 				value={search}
-// 				onChange={(e) => setSearch(e.target.value)}
-// 			/>
-// 				<button type='submit' className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
-// 				<IoSearchSharp className='w-6 h-6 outline-none' />
-// 			</button>
-// 		</form>
-// 	);
-// };
-// export default SearchInput;

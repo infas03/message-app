@@ -1,13 +1,10 @@
 import { useSelector, useDispatch } from 'react-redux';
-//import { useSocketContext } from "../../context/SocketContext";
-//import useConversation from "../../zustand/useConversation";
-import { setSelectedConversation, fetchMessages, setMessages } from '../../../actions/messageAction';
-import { useSocketContext } from '../../../context/socketContext';
-import { markMsgAsRead } from '../../../actions/messageAction';
-import defaultImage from '../../../assets/images/Default_profilepic.png';
+import { setSelectedConversation} from '../../actions/messageAction';
+import { useSocketContext } from '../../context/socketContext';
+import { markMsgAsRead } from '../../actions/messageAction';
+import defaultImage from '../../assets/images/Default_profilepic.png';
 
 const Conversation = ({ conversation, lastIdx, emoji }) => {
-  //const { selectedConversation, setSelectedConversation } = useConversation();
   const dispatch = useDispatch();
   const selectedConversation = useSelector((state) => state.message.selectedConversation);
 
