@@ -1,26 +1,35 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { IoSearchSharp } from 'react-icons/io5';
 import { setSelectedConversation } from '../../actions/messageAction';
 import { ToastBar } from '../../common/toastbar';
+import { fetchAllUsers } from '../../actions/userAction';
+import { useAuthContext } from '../../context/authContext';
 
 const SearchInput = () => {
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const dispatch = useDispatch();
   const conversations = useSelector((state) => state.message.useConversations);
+  const allUsers = useSelector((state) => state.user.allUsers);
+
+  const { authUser } = useAuthContext();
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
     if (e.target.value.length >= 3) {
       const results = conversations.allUsers.filter((c) =>
-        c.companyName.toLowerCase().includes(e.target.value.toLowerCase())
+        c.username.toLowerCase().includes(e.target.value.toLowerCase())
       );
       setSearchResults(results);
     } else {
       setSearchResults([]);
     }
   };
+
+  useEffect(()=>{
+    dispatch(fetchAllUsers())
+  }, [])
 
   const handleResultClick = (conversation) => {
     dispatch(setSelectedConversation(conversation));
@@ -35,8 +44,12 @@ const SearchInput = () => {
       return ToastBar.error('Search term must be at least 3 characters long');
     }
 
-    const conversation = conversations.allUsers.find((c) => c.companyName.toLowerCase().includes(search.toLowerCase()));
+    const filteredUsers = allUsers.filter(user => user._id !== authUser);
+    console.log('filteredUsers:', filteredUsers);
 
+    const conversation = filteredUsers.find((c) => c.username.toLowerCase().includes(search.toLowerCase()));
+
+    console.log('conversation:', conversation);
     if (conversation) {
       dispatch(setSelectedConversation(conversation));
       setSearch('');

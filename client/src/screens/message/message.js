@@ -10,7 +10,7 @@ const Message = ({ message }) => {
     return d;
   };
 
-  const fromMe = message?.senderId === authUser?.id;
+  const fromMe = message?.senderId === authUser;
   const formattedTime = extractTime(message.timestamp);
   const chatClassName = fromMe ? 'items-end justify-end' : 'items-end';
   const bubbleBgColor = fromMe ? 'bg-[#8fb0b0]' : 'bg-[#f4f8f9]';
@@ -19,7 +19,7 @@ const Message = ({ message }) => {
     <div className={`flex ${chatClassName} gap-2.5 w-full mb-4`}>
       <div className="flex flex-col w-full max-w-[320px]">
         <div
-          className={`leading-1.5 px-4 py-1.5 border-gray-200 ${bubbleBgColor} text-black rounded-xl dark:bg-gray-700`}
+          className={`leading-1.5 px-4 py-1.5 border-gray-200 ${bubbleBgColor} text-white rounded-xl dark:bg-gray-700`}
         >
           <p className="text-lg font-semibold">{message?.message}</p>
         </div>

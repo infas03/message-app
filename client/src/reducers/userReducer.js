@@ -1,31 +1,37 @@
 import {
   FETCH_USER_INIT,
   FETCH_USER_REQUEST,
-  FETCH_USER_SUCCESS
-} from '../actions/userAction';
+  FETCH_USER_SUCCESS,
+  SET_ALL_USERS,
+} from "../actions/userAction";
 
 const initialState = {
-  userId: '',
-  username: '',
+  userId: "",
+  username: "",
   isNewLogin: null,
+  allUsers: [],
 };
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_USER_REQUEST:
       return {
-        ...state
+        ...state,
       };
     case FETCH_USER_SUCCESS:
-      console.log('user payload: ', action.payload);
       return {
         ...state,
-        userId: action.payload?.user?._id,
-        username: action.payload?.user?.username,
+        userId: action.payload?._id,
+        username: action.payload?.username,
       };
     case FETCH_USER_INIT:
       return {
-        state: initialState
+        state: initialState,
+      };
+    case SET_ALL_USERS:
+      return {
+        ...state,
+        allUsers: action.payload,
       };
     default:
       return state;

@@ -14,10 +14,6 @@ const Messages = () => {
   console.log("Is 'messages' an array?:", Array.isArray(messages));
 
   useEffect(() => {
-    console.log('CHECK');
-  }, []);
-
-  useEffect(() => {
     if (messages?.messages?.length > 0 && messageContainerRef.current) {
       messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
     }

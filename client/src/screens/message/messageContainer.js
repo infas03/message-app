@@ -7,9 +7,13 @@ import { fetchMessages } from '../../actions/messageAction';
 import { useSocketContext } from '../../context/socketContext';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 import defaultImage from '../../assets/images/Default_profilepic.png';
+import { useAuthContext } from '../../context/authContext';
 
 const MessageContainer = () => {
   const dispatch = useDispatch();
+
+  const { authUser } = useAuthContext();
+  
   const selectedConversation = useSelector((state) => state.message.selectedConversation);
 
   const messages = useSelector((state) => state.message.messages);
@@ -20,11 +24,11 @@ const MessageContainer = () => {
 
   useEffect(() => {
     console.log('Current selectedConversation:', selectedConversation);
-    if (selectedConversation && selectedConversation._id) {
+    if (selectedConversation && selectedConversation._id && authUser) {
       console.log('Fetching messages for conversation:', selectedConversation._id);
-      dispatch(fetchMessages(selectedConversation._id));
+      dispatch(fetchMessages(selectedConversation._id, authUser));
     }
-  }, [selectedConversation, dispatch]);
+  }, [selectedConversation, dispatch, authUser]);
 
   const handleBackClick = () => {
     dispatch(setSelectedConversation(null));
@@ -42,9 +46,9 @@ const MessageContainer = () => {
           <div className="flex justify-between items-center py-2 px-5 mb-2 h-14 bg-[#f4f8f9] border-b-[1px]">
             <div className="flex items-center gap-x-2 lg:gap-x-4">
               <img
-                src={selectedConversation?.companyLogo ? selectedConversation.companyLogo : defaultImage}
+                src={defaultImage}
                 alt="avatar"
-                className="w-11 h-11 rounded-full object-cover lg:hidden"
+                className="w-11 h-11 rounded-full object-cover"
               />
               <div className="flex flex-col flex-grow">
                 <span
@@ -55,7 +59,7 @@ const MessageContainer = () => {
                     textOverflow: 'ellipsis'
                   }}
                 >
-                  {selectedConversation?.companyName}
+                  {selectedConversation?.username}
                 </span>
                 {isOnline && (
                   <div className="flex flex-row items-center gap-x-1">

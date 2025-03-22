@@ -43,13 +43,14 @@ export const updateUnreadCount = (senderId) => {
   };
 };
 
-export const fetchMessages = (id) => {
+export const fetchMessages = (id, senderId) => {
   console.log('selected id ' + id);
+  console.log('senderId ' + senderId);
   return async (dispatch) => {
     try {
       const response = await axios.get(`${apiUrl}/message/get/${id}`, {
-        headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('token')
+        params: {
+          senderId: senderId
         }
       });
       if (response.status === 200) {
@@ -145,22 +146,23 @@ export const addToConversation = (applicant) => async (dispatch) => {
 //   }
 // };
 
-export const sendMessage = (id, messageContent) => async (dispatch) => {
+export const sendMessage = (id, messageContent, senderId) => async (dispatch) => {
   console.log('new message');
   try {
     const response = await axios.post(
       `${apiUrl}/message/send/${id}`,
       { message: messageContent },
       {
-        headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('token')
+        params: {
+          senderId: senderId
         }
       }
     );
     if (response.status === 200) {
       console.log('res ' + response.data);
       // dispatch(setNewMessages(response?.data));
-      dispatch(fetchMessages(id));
+      dispatch(fetchMessages(id, senderId));
+      dispatch(getConversations(senderId))
     }
   } catch (error) {
     if (error.response && error.response.status === 500) {
@@ -196,7 +198,7 @@ export const getConversations = (value) => async (dispatch) => {
   }
 };
 
-export const markMsgAsRead = (senderId) => {
+export const markMsgAsRead = (senderId, currentId) => {
   console.log('read id: ', senderId);
   return async (dispatch) => {
     try {
@@ -204,8 +206,8 @@ export const markMsgAsRead = (senderId) => {
         `${apiUrl}/message/markAsRead/${senderId}`,
         {},
         {
-          headers: {
-            Authorization: 'Bearer ' + localStorage.getItem('token')
+          params: {
+            currentId: currentId
           }
         }
       );

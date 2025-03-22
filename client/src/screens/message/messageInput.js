@@ -2,8 +2,11 @@ import { useState } from 'react';
 import { BsSend } from 'react-icons/bs';
 import { sendMessage } from '../../actions/messageAction';
 import { useSelector, useDispatch } from 'react-redux';
+import { useAuthContext } from '../../context/authContext';
 
 const MessageInput = () => {
+  const { authUser } = useAuthContext();
+
   const [message, setMessage] = useState('');
   const dispatch = useDispatch();
   const selectedConversation = useSelector((state) => state.message.selectedConversation);
@@ -12,7 +15,7 @@ const MessageInput = () => {
     e.preventDefault();
     if (!message) return;
     const id = selectedConversation?._id;
-    dispatch(sendMessage(id, message));
+    dispatch(sendMessage(id, message, authUser));
     setMessage('');
   };
 

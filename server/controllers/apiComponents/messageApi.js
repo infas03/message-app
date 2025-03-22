@@ -12,10 +12,13 @@ router.get('/get/:id', async (req, res) => {
     try {
 
         const { id: userToChatId } = req.params;
-        const senderId = res.locals.currentId;
+        // const senderId = res.locals.currentId;
 
-        console.log("senderId" + senderId)
-        
+        const { senderId } = req.query;
+
+        console.log("senderId: " + senderId)
+        console.log("userToChatId: " + userToChatId)
+
         const conversation = await Conversation.findOne({
             participants: { $all: [senderId, userToChatId] },
         }).populate("messages")
@@ -59,11 +62,14 @@ router.post('/send/:id', async (req, res) => {
 console.log('send msg')
     try {
 
-        console.log(res.locals.currentId);
+        // console.log(res.locals.currentId);
 
         const { message } = req.body;
         const { id: receiverId } = req.params;
-        const senderId = res.locals.currentId;
+        // const senderId = res.locals.currentId;
+        const { senderId } = req.query;
+        console.log('senderId: ', senderId)
+        console.log('receiverId: ', receiverId)
 
         let conversation = await Conversation.findOne({
             participants: { $all: [senderId, receiverId] }
@@ -111,15 +117,15 @@ console.log('send msg')
             link = '/profile/messages'
           }
     
-          const notification = new Notification({
-            receiverId: receiverId,
-            senderId: senderId,
-            message: `You have received a new Message`,
-            type: 'message',
-            senderRole: res.locals.role,
-            link: link
-          })
-          await notification.save()
+          // const notification = new Notification({
+          //   receiverId: receiverId,
+          //   senderId: senderId,
+          //   message: `You have received a new Message`,
+          //   type: 'message',
+          //   senderRole: res.locals.role,
+          //   link: link
+          // })
+          // await notification.save()
         }
 
         console.log(newMessage)
@@ -134,12 +140,12 @@ console.log('send msg')
 router.patch('/markAsRead/:senderId', async (req, res) => {
     try {
         const { senderId } = req.params;
-        const receiverId = res.locals.currentId;
+        const receiverId = req.query.currentId;
 
         console.log("mark as read")
 
-        console.log(senderId)
-        console.log(receiverId);
+        console.log("senderId: ", senderId)
+        console.log("receiverId: ", receiverId);
 
         const conversation = await Conversation.findOne({
             participants: { $all: [senderId, receiverId] }
@@ -156,11 +162,6 @@ router.patch('/markAsRead/:senderId', async (req, res) => {
 
         conversation.unreadCounts.set(receiverId, 0);
         await conversation.save();
-
-        await Notification.updateMany(
-            { senderId, receiverId, type: 'message', isRead: false },
-            { isRead: true }
-        );
 
         res.status(200).json({ message: "Messages marked as read" });
     } catch (err) {
@@ -200,13 +201,11 @@ router.get('/getusersforsidebar', async (req, res) => {
     try {
         // const senderId = res.locals.currentId;
         const senderId = req.query.currentId;
-        console.log("senderId: ", senderId)
+        console.log("getusersforsidebar senderId: ", senderId)
         
-        // const conversations = await Conversation.find({
-        //     participants: senderId
-        // });
-
-        const conversations = await Conversation.find();
+        const conversations = await Conversation.find({
+            participants: senderId
+        });
 
         console.log("conversations: ", conversations);
 
@@ -216,8 +215,10 @@ router.get('/getusersforsidebar', async (req, res) => {
                 participantIds.add(participant.toString());
             });
         });
-
+        
         participantIds.delete(senderId.toString());
+
+        console.log("participantIds: ", participantIds);
         let allUsers = [];
 
          allUsers = await User.find({ _id: { $in: Array.from(participantIds) } });

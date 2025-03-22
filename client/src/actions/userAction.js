@@ -16,6 +16,8 @@ export const FETCH_USER_BY_ID = 'FETCH_USER_BY_ID';
 export const SET_CURRENT_USER_ID = 'SET_CURRENT_USER_ID';
 export const SET_CURRENT_USER_ID_NULL = 'SET_CURRENT_USER_ID_NULL';
 export const FETCH_ALL_INTERVIEWS = 'FETCH_ALL_INTERVIEWS';
+export const SET_ALL_USERS = 'SET_ALL_USERS';
+export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 
 export const fetchUserRequest = () => ({ type: FETCH_USER_REQUEST });
 
@@ -55,6 +57,12 @@ export const setCurrentIdNull = () => ({
   type: SET_CURRENT_USER_ID_NULL
 });
 
+export const setAllUsers = (data) => ({
+  type: SET_ALL_USERS,
+  payload: data
+});
+
+
 export const userLogin = (values, navigate, setAuthUser) => {
   console.log("login inputData: ", values);
   return async (dispatch) => {
@@ -64,6 +72,7 @@ export const userLogin = (values, navigate, setAuthUser) => {
         console.log('login res: ', response.data)
         console.log('candidate login id: ', response.data.result._id);
         dispatch(setCurrentId(response.data.result._id));
+        dispatch(fetchUserSuccess(response.data.result));
         setAuthUser(response.data.result._id);
         navigate('/message');
         ToastBar.success(response.data.successMsg);
@@ -98,6 +107,7 @@ export const userLogout = (navigate, setAuthUser) => {
           localStorage.removeItem('token');
           dispatch(fetchUserInit());
           setAuthUser(null);
+          dispatch(setCurrentIdNull());
           ToastBar.success(response.data.successMsg);
         }, 0);
       }
@@ -110,6 +120,25 @@ export const userLogout = (navigate, setAuthUser) => {
         // Handle other errors
         console.log(error.message);
         ToastBar.error(error.message);
+      }
+    }
+  };
+};
+
+export const fetchAllUsers = () => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(`${apiUrl}/user/getallusers`);
+      if (response.status === 200) {
+        console.log('all user res :' + response.data);
+        dispatch(setAllUsers(response.data.result));
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 500) {
+        console.log(error?.response?.data?.errorMsg[localLang]);
+      } else {
+        console.log('check error here');
+        dispatch({ type: 'FETCH_MESSAGES_FAILURE', payload: error.message });
       }
     }
   };

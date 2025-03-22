@@ -8,7 +8,9 @@ router.post("/createuser", (req, res) => {
   if (typeof req.body.username == "undefined")
     return res.status(500).json({ errorMsg: "username invalid" });
 
-  User.findOne({ username: req.body.username })
+  const username = req.body.username.toLowerCase();
+
+  User.findOne({ username: username})
     .then((existingUser) => {
       if (existingUser) {
         res
@@ -44,3 +46,14 @@ router.post('/logout', (req, res) => {
 export default function (app) {
   app.use('/api/user', router)
 }
+
+router.get("/getallusers", (req, res) => {
+  User.find()
+    .then((users) => {
+      res.status(200).json({ successMsg: "Users retrieved successfully", result: users });
+    })
+    .catch((e) => {
+      console.error(e);
+      res.status(500).json({ errorMsg: "Failed to retrieve users" });
+    });
+});

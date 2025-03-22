@@ -15,6 +15,7 @@ const MessageHome = () => {
   console.log('authUser: ', authUser)
 
   const selectedConversation = useSelector((state) => state.message.selectedConversation);
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(setSelectedConversation(null));
@@ -27,7 +28,8 @@ const MessageHome = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-950 p-5">
-      <div className="flex items-center justify-end">
+      <div className="flex items-center justify-end gap-x-5">
+        <div className='text-white font-bold text-lg'>{user?.username}</div>
         <button onClick={handleLogout} className='bg-red-500 px-5 py-2 rounded-md w-fit hover:bg-red-700 text-white font-bold'>
           Logout
         </button>
