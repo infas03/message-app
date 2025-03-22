@@ -38,7 +38,7 @@ const MessageContainer = () => {
   console.log('messages: ', messages);
 
   return (
-    <div className="min-w-full md:min-w-[600px] flex flex-col border-[1px] rounded-e-lg overflow-auto bg-gray-200">
+    <div className="w-96 flex flex-col border-[1px] rounded-lg overflow-auto bg-gray-200">
       {!selectedConversation ? (
         <NoChatSelected />
       ) : (
@@ -71,7 +71,7 @@ const MessageContainer = () => {
             </div>
             <div
               onClick={() => handleBackClick()}
-              className="lg:hidden flex items-center text-sm gap-x-1 font-bold cursor-pointer flex-shrink-0"
+              className="flex items-center text-sm gap-x-1 font-bold cursor-pointer flex-shrink-0"
             >
               <ChevronLeftIcon className="w-5 h-5 stroke-2" /> <span>Back</span>
             </div>
