@@ -35,7 +35,7 @@ const MessageHome = () => {
         </button>
       </div>
 
-      <div className="flex h-[650px] my-1 rounded-lg overflow-hidden bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0 justify-center">
+      <div className="flex h-[650px] my-1 overflow-hidden bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0 justify-center">
         <div className={`${selectedConversation ? 'hidden' : 'flex w-full p-5 h-screen'}`}>
           <Sidebar />
         </div>
